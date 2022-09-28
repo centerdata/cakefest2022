@@ -1,0 +1,9 @@
+0	9:00	10:00	Cake
+0	10:00	12:00	Cotton candy
+1	9:00	10:30	Dessert
+2	13:00	14:00	Marzipan
+2	11:30	11:45	Jujubes
+3	9:00	10:30	Powder power
+4	10:00	11:00	Dragée pie
+0	11:00	12:00	Pudding
+0	13:00	14:00	Chocolate bar

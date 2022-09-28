@@ -1,0 +1,20 @@
+Ma;"Ice cream";1
+Ma;"Caramels biscuit";2
+Ma;"Danish pie";3
+Ma;"Bear claw";4
+Di;"Apple pie";1
+Di;"Carrot cake";2
+Di;"Brownie";3
+Di;"Biscuit";4
+Wo;"Sugar plum";1
+Wo;"Cake icing";2
+Wo;"Jujubes";3
+Wo;"Tiramisu";4
+Do;"Pudding topping";1
+Do;"Cheesecake";2
+Do;"Pastry";3
+Do;"Sugar Cane";4
+Vr;"Sweet roll";1
+Vr;"Jelly beans";2
+Vr;"Donut gummies";3
+Vr;"Gummi bears";4
