@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Model\Entity\ScheduleType;
 
+use App\Model\Entity\Schedule;
 use DateTime;
+use Psr\Http\Message\UploadedFileInterface;
 
 interface ScheduleTypeInterface
 {
@@ -29,4 +31,10 @@ interface ScheduleTypeInterface
      * @return bool
      */
     public function scheduleExists(): bool;
+
+    /**
+     * @param Schedule $schedule
+     * @param UploadedFileInterface $uploadedFile
+     */
+    public function extractTimeSlots(Schedule $schedule, UploadedFileInterface $uploadedFile): void;
 }
