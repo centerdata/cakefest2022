@@ -17,5 +17,5 @@ vendor/bin/phpunit tests/TestCase/Controller/
 ```
 
 ## Presentation
-* [Slides](./Cakefest2022.potx)
+* [Slides](./Cakefest2022.pptx)
 * Video: *todo*
