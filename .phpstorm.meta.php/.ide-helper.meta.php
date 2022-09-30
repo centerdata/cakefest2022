@@ -123,66 +123,6 @@ namespace PHPSTORM_META {
 	);
 
 	expectedArguments(
-		\App\Model\Entity\Schedule::get(),
-		0,
-		argumentsSet('entityFields:App\Model\Entity\Schedule')
-	);
-
-	expectedArguments(
-		\App\Model\Entity\Schedule::getError(),
-		0,
-		argumentsSet('entityFields:App\Model\Entity\Schedule')
-	);
-
-	expectedArguments(
-		\App\Model\Entity\Schedule::getInvalidField(),
-		0,
-		argumentsSet('entityFields:App\Model\Entity\Schedule')
-	);
-
-	expectedArguments(
-		\App\Model\Entity\Schedule::getOriginal(),
-		0,
-		argumentsSet('entityFields:App\Model\Entity\Schedule')
-	);
-
-	expectedArguments(
-		\App\Model\Entity\Schedule::has(),
-		0,
-		argumentsSet('entityFields:App\Model\Entity\Schedule')
-	);
-
-	expectedArguments(
-		\App\Model\Entity\Schedule::hasValue(),
-		0,
-		argumentsSet('entityFields:App\Model\Entity\Schedule')
-	);
-
-	expectedArguments(
-		\App\Model\Entity\Schedule::isDirty(),
-		0,
-		argumentsSet('entityFields:App\Model\Entity\Schedule')
-	);
-
-	expectedArguments(
-		\App\Model\Entity\Schedule::isEmpty(),
-		0,
-		argumentsSet('entityFields:App\Model\Entity\Schedule')
-	);
-
-	expectedArguments(
-		\App\Model\Entity\Schedule::setDirty(),
-		0,
-		argumentsSet('entityFields:App\Model\Entity\Schedule')
-	);
-
-	expectedArguments(
-		\App\Model\Entity\Schedule::setError(),
-		0,
-		argumentsSet('entityFields:App\Model\Entity\Schedule')
-	);
-
-	expectedArguments(
 		\App\Model\Entity\TimeSlot::get(),
 		0,
 		argumentsSet('entityFields:App\Model\Entity\TimeSlot')
@@ -531,6 +471,7 @@ namespace PHPSTORM_META {
 		0,
 		'CounterCache',
 		'DebugKit.Timed',
+		'Schedules',
 		'Timestamp',
 		'Translate',
 		'Tree'
@@ -598,6 +539,7 @@ namespace PHPSTORM_META {
 		\Cake\ORM\Table::removeBehavior(),
 		0,
 		'CounterCache',
+		'Schedules',
 		'Timed',
 		'Timestamp',
 		'Translate',
@@ -1048,7 +990,6 @@ namespace PHPSTORM_META {
 		'MSYSTEM_CHOST',
 		'MSYSTEM_PREFIX',
 		'NUMBER_OF_PROCESSORS',
-		'OLDPWD',
 		'ORIGINAL_PATH',
 		'ORIGINAL_TEMP',
 		'ORIGINAL_TMP',
@@ -1253,19 +1194,6 @@ namespace PHPSTORM_META {
 	);
 
 	registerArgumentsSet(
-		'entityFields:App\Model\Entity\Schedule',
-		'checksum',
-		'created',
-		'file_location',
-		'file_name',
-		'id',
-		'modified',
-		'schedule_type_id',
-		'size',
-		'time_slots'
-	);
-
-	registerArgumentsSet(
 		'entityFields:App\Model\Entity\TimeSlot',
 		'appointment',
 		'created',
@@ -1293,11 +1221,7 @@ namespace PHPSTORM_META {
 		'DebugKit.Toolbar::clearCache',
 		'LegacySchedules::add',
 		'Pages::display',
-		'Schedules::add',
-		'Schedules::delete',
-		'Schedules::edit',
-		'Schedules::index',
-		'Schedules::view'
+		'Schedules::add'
 	);
 
 	registerArgumentsSet(

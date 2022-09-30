@@ -4,6 +4,10 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\SchedulesController;
+use App\Model\Entity\Schedule;
+use App\Model\Table\SchedulesTable;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -16,68 +20,71 @@ class SchedulesControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
-    /**
-     * Fixtures
-     *
-     * @var array<string>
-     */
-    protected $fixtures = [
-        'app.Schedules',
-        'app.TimeSlots',
-    ];
-
-    /**
-     * Test index method
-     *
-     * @return void
-     * @uses \App\Controller\SchedulesController::index()
-     */
-    public function testIndex(): void
+    public function setUp(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        parent::setUp();
+        $this->loadRoutes();
 
-    /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\SchedulesController::view()
-     */
-    public function testView(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+
+        $config = $this->getTableLocator()->exists('Schedules') ? [] : ['className' => SchedulesTable::class];
+        $this->Schedules = $this->getTableLocator()->get('Schedules', $config);
     }
 
     /**
      * Test add method
      *
+     * @dataProvider provideSchedules
      * @return void
-     * @uses \App\Controller\SchedulesController::add()
+     * @uses         \App\Controller\SchedulesController::add()
      */
-    public function testAdd(): void
+    public function testAdd($expectedResult, $file): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // Arrange
+        $pathinfo = pathinfo($file);
+
+        $tmp = TMP . $pathinfo['basename'];
+        copy($file, $tmp);
+
+        $scheduleFile = new \Laminas\Diactoros\UploadedFile(
+            $tmp,
+            filesize($file),
+            \UPLOAD_ERR_OK,
+            $pathinfo['basename'],
+            mime_content_type($file),
+        );
+
+        $postData = [
+            'file_name' => $scheduleFile,
+        ];
+        $this->configRequest([
+            'files' => $postData,
+        ]);
+
+        // Act
+        $this->post(Router::pathUrl('Schedules::add'), $postData);
+
+        /**
+         * @var Schedule $schedule
+         */
+        $schedule = $this->Schedules->findByFileName($pathinfo['basename'])->contain('TimeSlots')->first();
+        $uploaded = Configure::read('App.paths.schedules') . DS . $schedule->checksum;
+        $this->assertTrue(is_file($uploaded));
+        unlink($uploaded); // // Clean up
+
+        // Assert
+        $this->assertResponseCode(302);
+        $this->assertEquals($expectedResult, count($schedule->time_slots));
     }
 
     /**
-     * Test edit method
+     * Use same dataProvider as ScheduleControllerTest
      *
-     * @return void
-     * @uses \App\Controller\SchedulesController::edit()
+     * @return array
      */
-    public function testEdit(): void
+    public function provideSchedules(): array
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     * @uses \App\Controller\SchedulesController::delete()
-     */
-    public function testDelete(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        return require __DIR__ . DS . '../../data/dataProvider.php';
     }
 }

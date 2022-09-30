@@ -110,7 +110,6 @@ class LegacySchedulesTable extends Table
                     }
 
                     $tokens = explode(';', $line);
-                    //if (sizeof($tokens) == 3 && is_numeric($tokens[2]) && in_array($tokens[0], array('Ma', 'Di', 'Wo', 'Do', 'Vr'))) {
                     if (sizeof($tokens) == 3 && in_array($tokens[0], array('Ma', 'Di', 'Wo', 'Do', 'Vr'))) {
                         $result = self::CALENDAR_EXPERT;
                     }

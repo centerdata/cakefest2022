@@ -44,7 +44,6 @@ class LegacySchedulesControllerTest extends TestCase
     {
         // Arrange
         $pathinfo = pathinfo($file);
-        #debug($pathinfo);
 
         $tmp = TMP . $pathinfo['basename'];
         copy($file, $tmp);
@@ -80,12 +79,13 @@ class LegacySchedulesControllerTest extends TestCase
         $this->assertEquals($expectedResult, count($schedule->time_slots));
     }
 
+    /**
+     * Use same dataProvider as ScheduleControllerTest
+     *
+     * @return array
+     */
     public function provideSchedules(): array
     {
-        return [
-            [20, __DIR__ . DS . '..' . DS . '..' . DS . 'data' . DS . 'Calendar_Expert.txt'],
-            [9, __DIR__ . DS . '..' . DS . '..' . DS . 'data' . DS . 'SuperSchedule.txt'],
-            [8, __DIR__ . DS . '..' . DS . '..' . DS . 'data' . DS . 'Timetable_Master.csv'],
-        ];
+        return require __DIR__ . DS . '../../data/dataProvider.php';
     }
 }

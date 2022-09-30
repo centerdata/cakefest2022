@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
+use App\Model\Factories\ScheduleTypeFactory;
 use Cake\ORM\Entity;
 
 /**
@@ -18,6 +19,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $modified
  *
  * @property \App\Model\Entity\TimeSlot[] $time_slots
+ * @property ScheduleType $scheduleType
  */
 class Schedule extends Entity
 {
@@ -39,5 +41,13 @@ class Schedule extends Entity
         'created' => true,
         'modified' => true,
         'time_slots' => true,
+        'scheduleType' => true,
     ];
+    protected $_virtual = ['scheduleType'];
+
+    protected function _getScheduleType(): ?ScheduleType
+    {
+        return ScheduleTypeFactory::get($this->schedule_type_id, ['file' => $this->file_location]);
+    }
+
 }

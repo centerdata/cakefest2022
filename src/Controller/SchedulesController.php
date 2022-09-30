@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Core\Configure;
+use Psr\Http\Message\UploadedFileInterface;
+
 /**
  * Schedules Controller
  *
@@ -11,32 +14,11 @@ namespace App\Controller;
  */
 class SchedulesController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function index()
+
+    public function initialize(): void
     {
-        $schedules = $this->paginate($this->Schedules);
-
-        $this->set(compact('schedules'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Schedule id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $schedule = $this->Schedules->get($id, [
-            'contain' => ['TimeSlots'],
-        ]);
-
-        $this->set(compact('schedule'));
+        parent::initialize();
+        $this->Schedules = $this->fetchTable('Schedules');
     }
 
     /**
@@ -47,59 +29,25 @@ class SchedulesController extends AppController
     public function add()
     {
         $schedule = $this->Schedules->newEmptyEntity();
+
+        $this->viewBuilder()->setTemplate('form');
+
         if ($this->request->is('post')) {
             $schedule = $this->Schedules->patchEntity($schedule, $this->request->getData());
             if ($this->Schedules->save($schedule)) {
-                $this->Flash->success(__('The schedule has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $this->Flash->success(__('Schedule upload complete, ' . count($schedule->time_slots) . ' timeslots extracted'));
+                return $this->redirect(array('action' => 'add'));
+            } else {
+                $message = [];
+                foreach ($schedule->getErrors() as $field => $errors) {
+                    foreach ($errors as $error) {
+                        array_push($message, __($field) . ': ' . __($error));
+                    }
+                }
+                $this->Flash->error(implode('<br>', $message), ['escape' => false]);
             }
-            $this->Flash->error(__('The schedule could not be saved. Please, try again.'));
-        }
-        $this->set(compact('schedule'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Schedule id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $schedule = $this->Schedules->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $schedule = $this->Schedules->patchEntity($schedule, $this->request->getData());
-            if ($this->Schedules->save($schedule)) {
-                $this->Flash->success(__('The schedule has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The schedule could not be saved. Please, try again.'));
-        }
-        $this->set(compact('schedule'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Schedule id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $schedule = $this->Schedules->get($id);
-        if ($this->Schedules->delete($schedule)) {
-            $this->Flash->success(__('The schedule has been deleted.'));
-        } else {
-            $this->Flash->error(__('The schedule could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        $this->set('schedule', $schedule);
     }
 }

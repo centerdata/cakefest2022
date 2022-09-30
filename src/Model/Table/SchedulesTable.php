@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
+use App\Model\Entity\ScheduleType\ScheduleTypeInterface;
 use Cake\ORM\Table;
+use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 
 /**
@@ -50,6 +50,8 @@ class SchedulesTable extends Table
         $this->hasMany('TimeSlots', [
             'foreignKey' => 'schedule_id',
         ]);
+
+        $this->addBehavior('Schedules');
     }
 
     /**
@@ -61,15 +63,36 @@ class SchedulesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
+            ->setStopOnFailure()
             ->integer('schedule_type_id')
             ->requirePresence('schedule_type_id', 'create')
-            ->notEmptyString('schedule_type_id');
-
+            ->notEmptyString('schedule_type_id')
+            ->greaterThan('schedule_type_id', 0, __('Unsupported schedule file'))
+            ->add('schedule_type_id', 'hasCompleteWeek', [
+                'rule' => function ($value, $context) {
+                    $scheduleType = Hash::get($context, 'data.schedule_type', null);
+                    if (!$scheduleType instanceof ScheduleTypeInterface) {
+                        return false;
+                    }
+                    return $scheduleType->hasCompleteWeek();
+                },
+                'message' => __('The schedule does not contain a complete week'),
+            ]);
         $validator
             ->scalar('file_name')
             ->maxLength('file_name', 255)
             ->requirePresence('file_name', 'create')
-            ->notEmptyFile('file_name');
+            ->notEmptyFile('file_name')
+            ->add('file_name', 'scheduleExists', [
+                'rule' => function ($value, $context) {
+                    $scheduleType = Hash::get($context, 'data.schedule_type', null);
+                    if (!$scheduleType instanceof ScheduleTypeInterface) {
+                        return false;
+                    }
+                    return !$scheduleType->scheduleExists();
+                },
+                'message' => __('This schedule was already uploaded'),
+            ]);
 
         $validator
             ->scalar('file_location')
@@ -84,4 +107,5 @@ class SchedulesTable extends Table
 
         return $validator;
     }
+
 }
