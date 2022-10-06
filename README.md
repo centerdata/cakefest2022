@@ -18,7 +18,7 @@ vendor/bin/phpunit tests/TestCase/Controller/
 
 ## Presentation
 * [Slides](./Cakefest2022.pptx)
-* Video: *todo*
+* [Video](https://youtu.be/kDMe8XZQbYA)
 
 ### Schedule files
 Generated with [Cupcake Ipsum](http://www.cupcakeipsum.com/)
